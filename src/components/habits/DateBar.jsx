@@ -34,13 +34,13 @@ export default function DateBar() {
       {/* Navigation arrows (desktop) */}
       <button
         onClick={() => setActiveDate(subDays(activeDate, 1))}
-        className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 shadow-sm transition-all"
+        className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center rounded-full bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 text-slate-500 hover:text-slate-700 dark:hover:text-zinc-300 shadow-sm transition-all"
       >
         <ChevronLeft className="w-4 h-4" />
       </button>
       <button
         onClick={() => setActiveDate(addDays(activeDate, 1))}
-        className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 shadow-sm transition-all"
+        className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center rounded-full bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 text-slate-500 hover:text-slate-700 dark:hover:text-zinc-300 shadow-sm transition-all"
       >
         <ChevronRight className="w-4 h-4" />
       </button>
@@ -64,16 +64,16 @@ export default function DateBar() {
                   ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/25'
                   : today
                   ? 'bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800'
-                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
+                  : 'bg-white dark:bg-zinc-800 text-slate-600 dark:text-zinc-400 border border-slate-200 dark:border-zinc-700 hover:border-slate-300 dark:hover:border-zinc-600'
               }`}
             >
-              <span className={`text-[10px] uppercase tracking-wider ${active ? 'text-indigo-100' : 'text-slate-400 dark:text-slate-500'}`}>
+              <span className={`text-[10px] uppercase tracking-wider ${active ? 'text-indigo-100' : 'text-slate-400 dark:text-zinc-500'}`}>
                 {format(day, 'EEE')}
               </span>
               <span className="text-lg font-semibold leading-none">
                 {format(day, 'd')}
               </span>
-              <span className={`text-[10px] ${active ? 'text-indigo-200' : 'text-slate-400 dark:text-slate-500'}`}>
+              <span className={`text-[10px] ${active ? 'text-indigo-200' : 'text-slate-400 dark:text-zinc-500'}`}>
                 {format(day, 'MMM')}
               </span>
             </motion.button>

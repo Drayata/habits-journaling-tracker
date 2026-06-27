@@ -6,6 +6,7 @@ import RegisterPage from './pages/RegisterPage'
 import DashboardPage from './pages/DashboardPage'
 import HabitsPage from './pages/HabitsPage'
 import JournalPage from './pages/JournalPage'
+import StatsPage from './pages/StatsPage'
 import ProfilePage from './pages/ProfilePage'
 
 const router = createBrowserRouter([
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
       { index: true, element: <DashboardPage /> },
       { path: 'habits', element: <HabitsPage /> },
       { path: 'journal', element: <JournalPage /> },
+      { path: 'stats', element: <StatsPage /> },
       { path: 'profile', element: <ProfilePage /> },
     ],
   },

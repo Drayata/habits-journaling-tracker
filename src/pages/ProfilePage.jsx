@@ -61,10 +61,10 @@ export default function ProfilePage() {
     <div className="space-y-6 max-w-lg mx-auto">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-zinc-50">
           Profile
         </h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+        <p className="text-sm text-slate-500 dark:text-zinc-400 mt-0.5">
           Manage your account and preferences
         </p>
       </div>
@@ -81,7 +81,7 @@ export default function ProfilePage() {
           </span>
         </div>
         <div className="min-w-0">
-          <h2 className="text-base font-semibold text-slate-900 dark:text-white truncate">
+          <h2 className="text-base font-semibold text-slate-900 dark:text-zinc-50 truncate">
             {profile?.full_name || 'User'}
           </h2>
           <p className="text-sm text-slate-400 truncate">{user?.email}</p>
@@ -103,7 +103,7 @@ export default function ProfilePage() {
             <div className={`w-10 h-10 ${stat.bg} rounded-xl flex items-center justify-center mb-2`}>
               <stat.icon className={`w-5 h-5 ${stat.color}`} />
             </div>
-            <p className="text-lg font-bold text-slate-900 dark:text-white">
+            <p className="text-lg font-bold text-slate-900 dark:text-zinc-50">
               {stat.value}
             </p>
             <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">
@@ -120,13 +120,13 @@ export default function ProfilePage() {
         transition={{ delay: 0.2 }}
         className="bento-card space-y-4"
       >
-        <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+        <h3 className="text-sm font-semibold text-slate-700 dark:text-zinc-300">
           Edit Profile
         </h3>
 
         {/* Full Name */}
         <div>
-          <label htmlFor="profile-name" className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1.5">
+          <label htmlFor="profile-name" className="block text-sm font-medium text-slate-600 dark:text-zinc-400 mb-1.5">
             Full Name
           </label>
           <div className="relative">
@@ -136,14 +136,14 @@ export default function ProfilePage() {
               type="text"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all"
+              className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-zinc-800/50 border border-slate-200 dark:border-zinc-700 rounded-xl text-sm text-slate-900 dark:text-zinc-50 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all"
             />
           </div>
         </div>
 
         {/* Email (read-only) */}
         <div>
-          <label className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1.5">
+          <label className="block text-sm font-medium text-slate-600 dark:text-zinc-400 mb-1.5">
             Email
           </label>
           <div className="relative">
@@ -152,7 +152,7 @@ export default function ProfilePage() {
               type="email"
               value={user?.email || ''}
               readOnly
-              className="w-full pl-10 pr-4 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-500 dark:text-slate-400 cursor-not-allowed"
+              className="w-full pl-10 pr-4 py-2.5 bg-slate-100 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl text-sm text-slate-500 dark:text-zinc-400 cursor-not-allowed"
             />
           </div>
         </div>
@@ -186,14 +186,14 @@ export default function ProfilePage() {
         transition={{ delay: 0.3 }}
         className="bento-card space-y-3"
       >
-        <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+        <h3 className="text-sm font-semibold text-slate-700 dark:text-zinc-300">
           Preferences
         </h3>
 
         {/* Dark Mode Toggle */}
         <button
           onClick={toggleTheme}
-          className="w-full flex items-center justify-between px-3 py-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
+          className="w-full flex items-center justify-between px-3 py-3 bg-slate-50 dark:bg-zinc-800/50 rounded-xl transition-colors hover:bg-slate-100 dark:hover:bg-zinc-800"
         >
           <div className="flex items-center gap-3">
             {isDark ? (
@@ -201,7 +201,7 @@ export default function ProfilePage() {
             ) : (
               <Sun className="w-5 h-5 text-amber-500" />
             )}
-            <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+            <span className="text-sm font-medium text-slate-700 dark:text-zinc-300">
               {isDark ? 'Dark Mode' : 'Light Mode'}
             </span>
           </div>

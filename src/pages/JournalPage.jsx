@@ -23,10 +23,10 @@ export default function JournalPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-zinc-50">
             Journal
           </h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+          <p className="text-sm text-slate-500 dark:text-zinc-400 mt-0.5">
             {format(activeDate, 'EEEE, MMMM d, yyyy')}
           </p>
         </div>
@@ -65,7 +65,7 @@ export default function JournalPage() {
         transition={{ delay: 0.1 }}
         className="bento-card"
       >
-        <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">
+        <h3 className="text-sm font-medium text-slate-700 dark:text-zinc-300 mb-3">
           How are you feeling?
         </h3>
         <div className="flex items-center justify-between gap-2">
@@ -77,7 +77,7 @@ export default function JournalPage() {
               className={`flex-1 flex flex-col items-center gap-1 py-3 rounded-xl transition-all ${
                 mood === m.value
                   ? 'bg-indigo-50 dark:bg-indigo-950/40 border-2 border-indigo-300 dark:border-indigo-700 shadow-sm'
-                  : 'border-2 border-transparent hover:bg-slate-50 dark:hover:bg-slate-800/50'
+                  : 'border-2 border-transparent hover:bg-slate-50 dark:hover:bg-zinc-800/50'
               }`}
             >
               <span className={`text-2xl transition-transform ${mood === m.value ? 'scale-110' : ''}`}>
@@ -86,7 +86,7 @@ export default function JournalPage() {
               <span className={`text-[10px] font-medium ${
                 mood === m.value
                   ? 'text-indigo-600 dark:text-indigo-400'
-                  : 'text-slate-400 dark:text-slate-500'
+                  : 'text-slate-400 dark:text-zinc-500'
               }`}>
                 {m.label}
               </span>
@@ -104,7 +104,7 @@ export default function JournalPage() {
       >
         <div className="flex items-center gap-2 mb-3">
           <BookOpen className="w-4 h-4 text-indigo-500" />
-          <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300">
+          <h3 className="text-sm font-medium text-slate-700 dark:text-zinc-300">
             Today&apos;s Entry
           </h3>
         </div>
@@ -119,7 +119,7 @@ export default function JournalPage() {
             value={content}
             onChange={(e) => updateContent(e.target.value)}
             placeholder="Write about your day, reflect on your progress, or just let your thoughts flow..."
-            className="w-full min-h-[300px] md:min-h-[400px] bg-transparent text-slate-800 dark:text-slate-200 text-sm leading-relaxed placeholder-slate-300 dark:placeholder-slate-600 resize-none focus:outline-none"
+            className="w-full min-h-[300px] md:min-h-[400px] bg-transparent text-slate-800 dark:text-zinc-200 text-sm leading-relaxed placeholder-slate-300 dark:placeholder-zinc-600 resize-none focus:outline-none"
           />
         )}
       </motion.div>
@@ -131,7 +131,7 @@ export default function JournalPage() {
         transition={{ delay: 0.4 }}
         className="text-center py-4"
       >
-        <p className="text-xs text-slate-400 dark:text-slate-500">
+        <p className="text-xs text-slate-400 dark:text-zinc-500">
           💡 Your journal auto-saves as you type. Take your time.
         </p>
       </motion.div>

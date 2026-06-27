@@ -26,9 +26,9 @@
 
   /* Surface colors */
   --color-surface-light: #ffffff;
-  --color-surface-dark: #18181b;
+  --color-surface-dark: #09090b;
   --color-card-light: #ffffff;
-  --color-card-dark: #1e293b;
+  --color-card-dark: #18181b;
 }
 
 /* ===== Base Styles ===== */
@@ -73,9 +73,9 @@ html.dark body {
 }
 
 html.dark .bento-card {
-  background: #1e293b;
-  border-color: #334155;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+  background: #18181b;
+  border-color: #27272a;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
 }
 
 .bento-card:hover {
@@ -84,21 +84,24 @@ html.dark .bento-card {
 }
 
 html.dark .bento-card:hover {
-  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.5);
+  border-color: #3f3f46;
 }
 
 /* ===== Glassmorphism Card ===== */
 .glass-card {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(226, 232, 240, 0.6);
   border-radius: 1.5rem;
 }
 
 html.dark .glass-card {
-  background: rgba(30, 41, 59, 0.7);
-  border-color: rgba(71, 85, 105, 0.3);
+  background: #18181b;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-color: #27272a;
 }
 
 /* ===== Scrollbar Styling ===== */
@@ -117,7 +120,7 @@ html.dark .glass-card {
 }
 
 html.dark ::-webkit-scrollbar-thumb {
-  background: #475569;
+  background: #3f3f46;
 }
 
 /* ===== Custom Utility Animations ===== */
@@ -157,4 +160,11 @@ html.dark ::-webkit-scrollbar-thumb {
 
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+/* ===== Dark mode form inputs ===== */
+html.dark input,
+html.dark textarea,
+html.dark select {
+  color-scheme: dark;
 }

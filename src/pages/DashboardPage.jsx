@@ -7,6 +7,7 @@ import {
   BookOpen,
   ChevronRight,
   Sparkles,
+  BarChart3,
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
@@ -60,13 +61,20 @@ export default function DashboardPage() {
         className="flex items-start justify-between"
       >
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-zinc-50">
             {greeting}, {firstName} ✨
           </h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-sm text-slate-500 dark:text-zinc-400 mt-1">
             {format(new Date(), 'EEEE, MMMM d, yyyy')}
           </p>
         </div>
+        <Link
+          to="/stats"
+          className="flex items-center gap-1.5 px-3 py-2 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-xl text-sm font-medium text-slate-600 dark:text-zinc-400 hover:text-indigo-500 dark:hover:text-indigo-400 hover:border-indigo-300 dark:hover:border-indigo-800 transition-all"
+        >
+          <BarChart3 className="w-4 h-4" />
+          <span className="hidden sm:inline">Statistics</span>
+        </Link>
       </motion.div>
 
       {/* Bento Grid */}
@@ -80,10 +88,12 @@ export default function DashboardPage() {
           className="bento-card flex flex-col items-center justify-center py-6 md:row-span-2"
         >
           <ProgressRing progress={todayRate} size={140} strokeWidth={10} />
-          <p className="text-sm font-medium text-slate-700 dark:text-slate-300 mt-4">
+          <p className="text-sm font-medium text-slate-700 dark:text-zinc-300 mt-4">
             {completedToday} of {habits.length} habits
           </p>
-          <p className="text-xs text-slate-400 mt-0.5">completed today</p>
+          <p className="text-xs text-slate-400 dark:text-zinc-500 mt-0.5">
+            completed today
+          </p>
         </motion.div>
 
         {/* ===== Streak Card ===== */}
@@ -98,15 +108,15 @@ export default function DashboardPage() {
             <div className="w-10 h-10 bg-amber-50 dark:bg-amber-950/30 rounded-xl flex items-center justify-center">
               <Flame className="w-5 h-5 text-amber-500" />
             </div>
-            <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">
+            <span className="text-xs font-medium text-slate-400 dark:text-zinc-500 uppercase tracking-wider">
               Best Streak
             </span>
           </div>
-          <p className="text-3xl font-bold text-slate-900 dark:text-white">
+          <p className="text-3xl font-bold text-slate-900 dark:text-zinc-50">
             {bestStreak}
-            <span className="text-lg text-slate-400 font-normal ml-1">days</span>
+            <span className="text-lg text-slate-400 dark:text-zinc-500 font-normal ml-1">days</span>
           </p>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-slate-400 dark:text-zinc-500 mt-1">
             {bestStreak > 0 ? 'Keep the momentum going! 🔥' : 'Start your first streak today!'}
           </p>
         </motion.div>
@@ -123,22 +133,22 @@ export default function DashboardPage() {
             <div className="w-10 h-10 bg-indigo-50 dark:bg-indigo-950/30 rounded-xl flex items-center justify-center">
               <TrendingUp className="w-5 h-5 text-indigo-500" />
             </div>
-            <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">
+            <span className="text-xs font-medium text-slate-400 dark:text-zinc-500 uppercase tracking-wider">
               Overview
             </span>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <p className="text-2xl font-bold text-slate-900 dark:text-white">
+              <p className="text-2xl font-bold text-slate-900 dark:text-zinc-50">
                 {habits.length}
               </p>
-              <p className="text-xs text-slate-400">Active Habits</p>
+              <p className="text-xs text-slate-400 dark:text-zinc-500">Active Habits</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-slate-900 dark:text-white">
+              <p className="text-2xl font-bold text-slate-900 dark:text-zinc-50">
                 {completions.length}
               </p>
-              <p className="text-xs text-slate-400">Completions</p>
+              <p className="text-xs text-slate-400 dark:text-zinc-500">Completions</p>
             </div>
           </div>
         </motion.div>
@@ -154,13 +164,13 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4 text-emerald-500" />
-              <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+              <h3 className="text-sm font-semibold text-slate-700 dark:text-zinc-300">
                 Activity (4 weeks)
               </h3>
             </div>
             <Link
               to="/habits"
-              className="flex items-center gap-1 text-xs text-indigo-500 hover:text-indigo-600 font-medium transition-colors"
+              className="flex items-center gap-1 text-xs text-indigo-500 hover:text-indigo-400 font-medium transition-colors"
             >
               View All <ChevronRight className="w-3 h-3" />
             </Link>
@@ -185,20 +195,20 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-indigo-500" />
-              <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+              <h3 className="text-sm font-semibold text-slate-700 dark:text-zinc-300">
                 Today&apos;s Habits
               </h3>
             </div>
             <Link
               to="/habits"
-              className="flex items-center gap-1 text-xs text-indigo-500 hover:text-indigo-600 font-medium transition-colors"
+              className="flex items-center gap-1 text-xs text-indigo-500 hover:text-indigo-400 font-medium transition-colors"
             >
               Manage <ChevronRight className="w-3 h-3" />
             </Link>
           </div>
 
           {habits.length === 0 ? (
-            <p className="text-sm text-slate-400 py-4 text-center">
+            <p className="text-sm text-slate-400 dark:text-zinc-500 py-4 text-center">
               No habits yet. <Link to="/habits" className="text-indigo-500 hover:underline">Create one!</Link>
             </p>
           ) : (
@@ -212,15 +222,15 @@ export default function DashboardPage() {
                     onClick={() => toggleCompletion(habit.id, activeDate)}
                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all ${
                       done
-                        ? 'bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/40'
-                        : 'bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
+                        ? 'bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/40'
+                        : 'bg-slate-50 dark:bg-zinc-800/50 border border-slate-200 dark:border-zinc-700 hover:border-slate-300 dark:hover:border-zinc-600'
                     }`}
                   >
                     <div
                       className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${
                         done
                           ? 'border-emerald-500 bg-emerald-500'
-                          : 'border-slate-300 dark:border-slate-600'
+                          : 'border-slate-300 dark:border-zinc-600'
                       }`}
                     >
                       {done && (
@@ -232,8 +242,8 @@ export default function DashboardPage() {
                     <span
                       className={`text-sm font-medium ${
                         done
-                          ? 'text-slate-400 dark:text-slate-500 line-through'
-                          : 'text-slate-700 dark:text-slate-300'
+                          ? 'text-slate-400 dark:text-zinc-500 line-through'
+                          : 'text-slate-700 dark:text-zinc-300'
                       }`}
                     >
                       {habit.title}
@@ -260,13 +270,13 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <BookOpen className="w-4 h-4 text-indigo-500" />
-              <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+              <h3 className="text-sm font-semibold text-slate-700 dark:text-zinc-300">
                 Journal
               </h3>
             </div>
             <Link
               to="/journal"
-              className="flex items-center gap-1 text-xs text-indigo-500 hover:text-indigo-600 font-medium transition-colors"
+              className="flex items-center gap-1 text-xs text-indigo-500 hover:text-indigo-400 font-medium transition-colors"
             >
               Write <ChevronRight className="w-3 h-3" />
             </Link>

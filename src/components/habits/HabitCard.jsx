@@ -33,7 +33,7 @@ export default function HabitCard({
         className={`w-9 h-9 rounded-xl flex-shrink-0 flex items-center justify-center border-2 transition-all duration-300 ${
           completed
             ? 'border-emerald-500 bg-emerald-500 shadow-lg shadow-emerald-500/25'
-            : 'border-slate-300 dark:border-slate-600 hover:border-emerald-400 dark:hover:border-emerald-500'
+            : 'border-slate-300 dark:border-zinc-600 hover:border-emerald-400 dark:hover:border-emerald-500'
         }`}
       >
         <AnimatePresence mode="wait">
@@ -55,14 +55,14 @@ export default function HabitCard({
         <h3
           className={`text-sm font-medium transition-all duration-300 ${
             completed
-              ? 'text-slate-400 dark:text-slate-500 line-through'
-              : 'text-slate-900 dark:text-white'
+              ? 'text-slate-400 dark:text-zinc-500 line-through'
+              : 'text-slate-900 dark:text-zinc-50'
           }`}
         >
           {habit.title}
         </h3>
         <div className="flex items-center gap-2 mt-0.5">
-          <span className="text-xs text-slate-400 dark:text-slate-500 capitalize">
+          <span className="text-xs text-slate-400 dark:text-zinc-500 capitalize">
             {habit.frequency}
           </span>
           {streak > 0 && (
@@ -78,7 +78,7 @@ export default function HabitCard({
       <div className="relative">
         <button
           onClick={() => setShowMenu(!showMenu)}
-          className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50 opacity-0 group-hover:opacity-100 transition-all"
+          className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-700/50 opacity-0 group-hover:opacity-100 transition-all"
         >
           <MoreVertical className="w-4 h-4" />
         </button>
@@ -94,14 +94,14 @@ export default function HabitCard({
                 initial={{ opacity: 0, scale: 0.95, y: -4 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: -4 }}
-                className="absolute right-0 top-full mt-1 z-50 w-36 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl overflow-hidden"
+                className="absolute right-0 top-full mt-1 z-50 w-36 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl shadow-xl overflow-hidden"
               >
                 <button
                   onClick={() => {
                     setShowMenu(false)
                     onEdit()
                   }}
-                  className="w-full flex items-center gap-2 px-3 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors"
+                  className="w-full flex items-center gap-2 px-3 py-2.5 text-sm text-slate-700 dark:text-zinc-300 hover:bg-slate-50 dark:hover:bg-zinc-700/50 transition-colors"
                 >
                   <Pencil className="w-3.5 h-3.5" />
                   Edit

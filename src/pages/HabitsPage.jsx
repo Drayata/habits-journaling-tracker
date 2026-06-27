@@ -51,10 +51,10 @@ export default function HabitsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-zinc-50">
             Habits
           </h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+          <p className="text-sm text-slate-500 dark:text-zinc-400 mt-0.5">
             {format(activeDate, 'EEEE, MMMM d')} · {completedCount}/{habits.length} done
           </p>
         </div>
@@ -93,10 +93,10 @@ export default function HabitsPage() {
           <div className="w-16 h-16 bg-indigo-50 dark:bg-indigo-950/30 rounded-2xl flex items-center justify-center mb-4">
             <Target className="w-8 h-8 text-indigo-400" />
           </div>
-          <h3 className="text-base font-semibold text-slate-700 dark:text-slate-300 mb-1">
+          <h3 className="text-base font-semibold text-slate-700 dark:text-zinc-300 mb-1">
             No habits yet
           </h3>
-          <p className="text-sm text-slate-400 dark:text-slate-500 max-w-xs">
+          <p className="text-sm text-slate-400 dark:text-zinc-500 max-w-xs">
             Start building better routines by adding your first habit.
           </p>
         </motion.div>
@@ -122,7 +122,7 @@ export default function HabitsPage() {
       {habits.length > 0 && (
         <div className="bento-card">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+            <span className="text-sm font-medium text-slate-700 dark:text-zinc-300">
               Today&apos;s Progress
             </span>
             <span className="text-sm font-semibold text-emerald-500">
@@ -132,7 +132,7 @@ export default function HabitsPage() {
               %
             </span>
           </div>
-          <div className="h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+          <div className="h-2 bg-slate-100 dark:bg-zinc-800 rounded-full overflow-hidden">
             <motion.div
               initial={{ width: 0 }}
               animate={{

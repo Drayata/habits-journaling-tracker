@@ -17,7 +17,7 @@ export default function ProgressRing({ progress, size = 120, strokeWidth = 8 }) 
           fill="none"
           stroke="currentColor"
           strokeWidth={strokeWidth}
-          className="text-slate-100 dark:text-slate-800"
+          className="text-slate-100 dark:text-zinc-800"
         />
         {/* Progress circle */}
         <motion.circle
@@ -46,11 +46,11 @@ export default function ProgressRing({ progress, size = 120, strokeWidth = 8 }) 
           key={percentage}
           initial={{ scale: 0.5, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="text-2xl font-bold text-slate-900 dark:text-white"
+          className="text-2xl font-bold text-slate-900 dark:text-zinc-50"
         >
           {percentage}%
         </motion.span>
-        <span className="text-[10px] text-slate-400 dark:text-slate-500 font-medium uppercase tracking-wider">
+        <span className="text-[10px] text-slate-400 dark:text-zinc-500 font-medium uppercase tracking-wider">
           Done
         </span>
       </div>
