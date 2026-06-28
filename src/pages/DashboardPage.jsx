@@ -61,16 +61,16 @@ export default function DashboardPage() {
         className="flex items-start justify-between"
       >
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-zinc-50">
+          <h1 className="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">
             {greeting}, {firstName} ✨
           </h1>
-          <p className="text-sm text-slate-500 dark:text-zinc-400 mt-1">
+          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
             {format(new Date(), 'EEEE, MMMM d, yyyy')}
           </p>
         </div>
         <Link
           to="/stats"
-          className="flex items-center gap-1.5 px-3 py-2 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-xl text-sm font-medium text-slate-600 dark:text-zinc-400 hover:text-indigo-500 dark:hover:text-indigo-400 hover:border-indigo-300 dark:hover:border-indigo-800 transition-all"
+          className="flex items-center gap-1.5 px-3 py-2 bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 rounded-xl text-sm font-medium text-zinc-500 dark:text-zinc-400 hover:text-indigo-500 dark:hover:text-indigo-400 hover:border-indigo-300 dark:hover:border-indigo-800 transition-all"
         >
           <BarChart3 className="w-4 h-4" />
           <span className="hidden sm:inline">Statistics</span>
@@ -88,10 +88,10 @@ export default function DashboardPage() {
           className="bento-card flex flex-col items-center justify-center py-6 md:row-span-2"
         >
           <ProgressRing progress={todayRate} size={140} strokeWidth={10} />
-          <p className="text-sm font-medium text-slate-700 dark:text-zinc-300 mt-4">
+          <p className="text-sm font-medium text-zinc-900 dark:text-zinc-50 mt-4">
             {completedToday} of {habits.length} habits
           </p>
-          <p className="text-xs text-slate-400 dark:text-zinc-500 mt-0.5">
+          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
             completed today
           </p>
         </motion.div>
@@ -108,15 +108,15 @@ export default function DashboardPage() {
             <div className="w-10 h-10 bg-amber-50 dark:bg-amber-950/30 rounded-xl flex items-center justify-center">
               <Flame className="w-5 h-5 text-amber-500" />
             </div>
-            <span className="text-xs font-medium text-slate-400 dark:text-zinc-500 uppercase tracking-wider">
+            <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
               Best Streak
             </span>
           </div>
-          <p className="text-3xl font-bold text-slate-900 dark:text-zinc-50">
+          <p className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">
             {bestStreak}
-            <span className="text-lg text-slate-400 dark:text-zinc-500 font-normal ml-1">days</span>
+            <span className="text-lg text-zinc-500 dark:text-zinc-400 font-normal ml-1">days</span>
           </p>
-          <p className="text-xs text-slate-400 dark:text-zinc-500 mt-1">
+          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
             {bestStreak > 0 ? 'Keep the momentum going! 🔥' : 'Start your first streak today!'}
           </p>
         </motion.div>
@@ -133,22 +133,22 @@ export default function DashboardPage() {
             <div className="w-10 h-10 bg-indigo-50 dark:bg-indigo-950/30 rounded-xl flex items-center justify-center">
               <TrendingUp className="w-5 h-5 text-indigo-500" />
             </div>
-            <span className="text-xs font-medium text-slate-400 dark:text-zinc-500 uppercase tracking-wider">
+            <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
               Overview
             </span>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <p className="text-2xl font-bold text-slate-900 dark:text-zinc-50">
+              <p className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
                 {habits.length}
               </p>
-              <p className="text-xs text-slate-400 dark:text-zinc-500">Active Habits</p>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400">Active Habits</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-slate-900 dark:text-zinc-50">
+              <p className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
                 {completions.length}
               </p>
-              <p className="text-xs text-slate-400 dark:text-zinc-500">Completions</p>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400">Completions</p>
             </div>
           </div>
         </motion.div>
@@ -164,7 +164,7 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4 text-emerald-500" />
-              <h3 className="text-sm font-semibold text-slate-700 dark:text-zinc-300">
+              <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-300">
                 Activity (4 weeks)
               </h3>
             </div>
@@ -195,7 +195,7 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-indigo-500" />
-              <h3 className="text-sm font-semibold text-slate-700 dark:text-zinc-300">
+              <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-300">
                 Today&apos;s Habits
               </h3>
             </div>
@@ -208,7 +208,7 @@ export default function DashboardPage() {
           </div>
 
           {habits.length === 0 ? (
-            <p className="text-sm text-slate-400 dark:text-zinc-500 py-4 text-center">
+            <p className="text-sm text-zinc-500 dark:text-zinc-400 py-4 text-center">
               No habits yet. <Link to="/habits" className="text-indigo-500 hover:underline">Create one!</Link>
             </p>
           ) : (
@@ -222,15 +222,15 @@ export default function DashboardPage() {
                     onClick={() => toggleCompletion(habit.id, activeDate)}
                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all ${
                       done
-                        ? 'bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/40'
-                        : 'bg-slate-50 dark:bg-zinc-800/50 border border-slate-200 dark:border-zinc-700 hover:border-slate-300 dark:hover:border-zinc-600'
+                        ? 'bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900/50'
+                        : 'bg-zinc-50 dark:bg-zinc-800 border border-zinc-200/80 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600'
                     }`}
                   >
                     <div
                       className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${
                         done
                           ? 'border-emerald-500 bg-emerald-500'
-                          : 'border-slate-300 dark:border-zinc-600'
+                          : 'border-zinc-300 dark:border-zinc-600'
                       }`}
                     >
                       {done && (
@@ -242,8 +242,8 @@ export default function DashboardPage() {
                     <span
                       className={`text-sm font-medium ${
                         done
-                          ? 'text-slate-400 dark:text-zinc-500 line-through'
-                          : 'text-slate-700 dark:text-zinc-300'
+                          ? 'text-emerald-900 dark:text-emerald-400'
+                          : 'text-zinc-700 dark:text-zinc-300'
                       }`}
                     >
                       {habit.title}
@@ -270,7 +270,7 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <BookOpen className="w-4 h-4 text-indigo-500" />
-              <h3 className="text-sm font-semibold text-slate-700 dark:text-zinc-300">
+              <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-300">
                 Journal
               </h3>
             </div>

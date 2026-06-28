@@ -30,8 +30,8 @@ const cardVariants = {
 function CustomTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null
   return (
-    <div className="bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl px-3 py-2 shadow-xl text-xs">
-      <p className="font-medium text-slate-900 dark:text-zinc-100 mb-1">{label}</p>
+    <div className="bg-white dark:bg-zinc-800 border border-zinc-200/80 dark:border-zinc-700 rounded-xl px-3 py-2 shadow-xl text-xs">
+      <p className="font-medium text-zinc-900 dark:text-zinc-100 mb-1">{label}</p>
       {payload.map((entry, i) => (
         <p key={i} style={{ color: entry.color }} className="font-medium">
           {entry.name}: {entry.value}%
@@ -44,8 +44,8 @@ function CustomTooltip({ active, payload, label }) {
 function MoodTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null
   return (
-    <div className="bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl px-3 py-2 shadow-xl text-xs">
-      <p className="font-medium text-slate-900 dark:text-zinc-100 mb-1">{label}</p>
+    <div className="bg-white dark:bg-zinc-800 border border-zinc-200/80 dark:border-zinc-700 rounded-xl px-3 py-2 shadow-xl text-xs">
+      <p className="font-medium text-zinc-900 dark:text-zinc-100 mb-1">{label}</p>
       {payload.map((entry, i) => (
         <p key={i} style={{ color: entry.color }} className="font-medium">
           Avg completion: {entry.value}%
@@ -84,15 +84,15 @@ export default function StatsPage() {
       <div className="flex items-center gap-4">
         <Link
           to="/"
-          className="p-2 rounded-xl bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-500 dark:text-zinc-400 hover:text-slate-700 dark:hover:text-zinc-200 transition-all"
+          className="p-2 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-all"
         >
           <ArrowLeft className="w-4 h-4" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-zinc-50">
+          <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
             Statistics
           </h1>
-          <p className="text-sm text-slate-500 dark:text-zinc-400 mt-0.5">
+          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
             Your habit insights from the last 30 days
           </p>
         </div>
@@ -114,7 +114,7 @@ export default function StatsPage() {
               className="bento-card text-center py-5"
             >
               <p className="text-3xl font-bold text-indigo-500">{avgCompletion}%</p>
-              <p className="text-xs text-slate-400 dark:text-zinc-500 mt-1 font-medium uppercase tracking-wider">
+              <p className="text-xs text-zinc-500 dark:text-zinc-500 mt-1 font-medium uppercase tracking-wider">
                 Avg Completion
               </p>
             </motion.div>
@@ -126,7 +126,7 @@ export default function StatsPage() {
               className="bento-card text-center py-5"
             >
               <p className="text-3xl font-bold text-emerald-500">{bestDay.date}</p>
-              <p className="text-xs text-slate-400 dark:text-zinc-500 mt-1 font-medium uppercase tracking-wider">
+              <p className="text-xs text-zinc-500 dark:text-zinc-500 mt-1 font-medium uppercase tracking-wider">
                 Best Day ({bestDay.rate}%)
               </p>
             </motion.div>
@@ -138,7 +138,7 @@ export default function StatsPage() {
               className="bento-card text-center py-5"
             >
               <p className="text-3xl font-bold text-amber-500">{activeDays}/30</p>
-              <p className="text-xs text-slate-400 dark:text-zinc-500 mt-1 font-medium uppercase tracking-wider">
+              <p className="text-xs text-zinc-500 dark:text-zinc-500 mt-1 font-medium uppercase tracking-wider">
                 Active Days
               </p>
             </motion.div>
@@ -154,7 +154,7 @@ export default function StatsPage() {
           >
             <div className="flex items-center gap-2 mb-5">
               <TrendingUp className="w-4 h-4 text-indigo-500" />
-              <h3 className="text-sm font-semibold text-slate-700 dark:text-zinc-300">
+              <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-300">
                 Daily Completion Rate
               </h3>
             </div>
@@ -170,7 +170,7 @@ export default function StatsPage() {
                   <CartesianGrid
                     strokeDasharray="3 3"
                     stroke="currentColor"
-                    className="text-slate-100 dark:text-zinc-800"
+                    className="text-zinc-100 dark:text-zinc-800"
                   />
                   <XAxis
                     dataKey="date"
@@ -217,11 +217,11 @@ export default function StatsPage() {
           >
             <div className="flex items-center gap-2 mb-5">
               <Heart className="w-4 h-4 text-pink-500" />
-              <h3 className="text-sm font-semibold text-slate-700 dark:text-zinc-300">
+              <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-300">
                 Mood vs. Habit Completion
               </h3>
             </div>
-            <p className="text-xs text-slate-400 dark:text-zinc-500 mb-4 -mt-2">
+            <p className="text-xs text-zinc-500 dark:text-zinc-500 mb-4 -mt-2">
               Average completion rate grouped by your daily mood
             </p>
             <div className="h-[250px] -ml-2">
@@ -230,7 +230,7 @@ export default function StatsPage() {
                   <CartesianGrid
                     strokeDasharray="3 3"
                     stroke="currentColor"
-                    className="text-slate-100 dark:text-zinc-800"
+                    className="text-zinc-100 dark:text-zinc-800"
                   />
                   <XAxis
                     dataKey="mood"
@@ -273,7 +273,7 @@ export default function StatsPage() {
           >
             <div className="flex items-center gap-2 mb-4">
               <BarChart3 className="w-4 h-4 text-emerald-500" />
-              <h3 className="text-sm font-semibold text-slate-700 dark:text-zinc-300">
+              <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-300">
                 Activity Heatmap (4 Weeks)
               </h3>
             </div>
