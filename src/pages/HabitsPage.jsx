@@ -6,6 +6,8 @@ import { useHabits } from '../hooks/useHabits'
 import DateBar from '../components/habits/DateBar'
 import HabitCard from '../components/habits/HabitCard'
 import HabitFormModal from '../components/habits/HabitFormModal'
+import SleepInputModal from '../components/habits/SleepInputModal'
+import { useSleep } from '../hooks/useSleep'
 import { format } from 'date-fns'
 
 export default function HabitsPage() {
@@ -24,6 +26,12 @@ export default function HabitsPage() {
 
   const [showModal, setShowModal] = useState(false)
   const [editingHabit, setEditingHabit] = useState(null)
+  
+  const [isSleepModalOpen, setIsSleepModalOpen] = useState(false)
+  const [selectedSleepHabit, setSelectedSleepHabit] = useState(null)
+  
+  const { getSleepLog, upsertSleepLog, loading: sleepLoading } = useSleep()
+  const todaySleepLog = getSleepLog(activeDate)
 
   const activeHabits = getActiveHabits(activeDate)
   const completedCount = activeHabits.filter((h) =>
@@ -46,6 +54,24 @@ export default function HabitsPage() {
   function handleClose() {
     setShowModal(false)
     setEditingHabit(null)
+  }
+
+  const handleHabitClick = (habit) => {
+    if (habit.title.toLowerCase() === 'sleep tracker') {
+      setIsSleepModalOpen(true)
+      setSelectedSleepHabit(habit)
+    } else {
+      toggleCompletion(habit.id, activeDate)
+    }
+  }
+
+  const handleSleepSave = async ({ bedtime, wakeTime, duration }) => {
+    await upsertSleepLog({ date: activeDate, sleepTime: bedtime, wakeTime, durationMinutes: duration })
+    if (selectedSleepHabit && !isCompleted(selectedSleepHabit.id, activeDate)) {
+      toggleCompletion(selectedSleepHabit.id, activeDate)
+    }
+    setIsSleepModalOpen(false)
+    setSelectedSleepHabit(null)
   }
 
   return (
@@ -111,7 +137,7 @@ export default function HabitsPage() {
                 habit={habit}
                 completed={isCompleted(habit.id, activeDate)}
                 streak={getStreak(habit.id)}
-                onToggle={() => toggleCompletion(habit.id, activeDate)}
+                onToggle={() => handleHabitClick(habit)}
                 onEdit={() => handleEdit(habit)}
                 onDelete={() => deleteHabit(habit.id)}
               />
@@ -153,6 +179,15 @@ export default function HabitsPage() {
         onClose={handleClose}
         onSubmit={handleSubmit}
         editHabit={editingHabit}
+      />
+
+      <SleepInputModal
+        isOpen={isSleepModalOpen}
+        onClose={() => setIsSleepModalOpen(false)}
+        onSave={handleSleepSave}
+        isLoading={sleepLoading}
+        initialBedtime={todaySleepLog?.sleep_time || '22:00'}
+        initialWakeTime={todaySleepLog?.wake_time || '06:00'}
       />
     </div>
   )

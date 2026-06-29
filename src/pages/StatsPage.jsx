@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { BarChart3, TrendingUp, Heart, ArrowLeft } from 'lucide-react'
+import { BarChart3, TrendingUp, Heart, ArrowLeft, Moon } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import {
   BarChart,
@@ -14,6 +14,7 @@ import {
 } from 'recharts'
 import { useStatistics } from '../hooks/useStatistics'
 import { useHabits } from '../hooks/useHabits'
+import { useSleep } from '../hooks/useSleep'
 import { useDate } from '../contexts/DateContext'
 import HeatmapGrid from '../components/dashboard/HeatmapGrid'
 import MonthNavigator from '../components/dashboard/MonthNavigator'
@@ -41,6 +42,20 @@ function CustomTooltip({ active, payload, label }) {
   )
 }
 
+function SleepTooltip({ active, payload, label }) {
+  if (!active || !payload?.length) return null
+  return (
+    <div className="bg-white dark:bg-zinc-800 border border-zinc-200/80 dark:border-zinc-700 rounded-xl px-3 py-2 shadow-xl text-xs">
+      <p className="font-medium text-zinc-900 dark:text-zinc-100 mb-1">{label}</p>
+      {payload.map((entry, i) => (
+        <p key={i} style={{ color: entry.color }} className="font-medium">
+          {entry.name}: {entry.value}h
+        </p>
+      ))}
+    </div>
+  )
+}
+
 function MoodTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null
   return (
@@ -61,6 +76,7 @@ function MoodTooltip({ active, payload, label }) {
 export default function StatsPage() {
   const { completionTrend, moodCorrelation, loading, daysInMonth } = useStatistics()
   const { habits, completions } = useHabits()
+  const { sleepLogs, loading: sleepLoading } = useSleep()
   const { monthLabel } = useDate()
 
   // Calculate summary stats
@@ -78,6 +94,22 @@ export default function StatsPage() {
   )
 
   const activeDays = completionTrend.filter((d) => d.completed > 0).length
+
+  const avgSleepMins = sleepLogs.length > 0
+    ? sleepLogs.reduce((sum, log) => sum + log.duration_minutes, 0) / sleepLogs.length
+    : 0
+
+  const avgSleepFormatted = avgSleepMins > 0
+    ? `${Math.floor(avgSleepMins / 60)}h ${Math.round(avgSleepMins % 60)}m`
+    : '0h 0m'
+
+  const sleepTrend = completionTrend.map(d => {
+    const log = sleepLogs.find(l => l.entry_date.endsWith(`-${d.date}`))
+    return {
+      date: d.date,
+      hours: log ? +(log.duration_minutes / 60).toFixed(1) : 0
+    }
+  })
 
   return (
     <div className="space-y-6">
@@ -109,7 +141,7 @@ export default function StatsPage() {
       ) : (
         <>
           {/* Summary Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <motion.div
               custom={0}
               variants={cardVariants}
@@ -146,11 +178,23 @@ export default function StatsPage() {
                 Active Days
               </p>
             </motion.div>
+            <motion.div
+              custom={3}
+              variants={cardVariants}
+              initial="hidden"
+              animate="visible"
+              className="bento-card text-center py-5"
+            >
+              <p className="text-3xl font-bold text-purple-500">{avgSleepFormatted}</p>
+              <p className="text-xs text-zinc-500 dark:text-zinc-500 mt-1 font-medium uppercase tracking-wider">
+                Avg Sleep
+              </p>
+            </motion.div>
           </div>
 
           {/* Completion Rate Line Chart */}
           <motion.div
-            custom={3}
+            custom={4}
             variants={cardVariants}
             initial="hidden"
             animate="visible"
@@ -211,9 +255,72 @@ export default function StatsPage() {
             </div>
           </motion.div>
 
+          {/* Sleep Duration Area Chart */}
+          <motion.div
+            custom={5}
+            variants={cardVariants}
+            initial="hidden"
+            animate="visible"
+            className="bento-card"
+          >
+            <div className="flex items-center gap-2 mb-5">
+              <Moon className="w-4 h-4 text-purple-500" />
+              <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-300">
+                Sleep Duration (Hours)
+              </h3>
+            </div>
+            <div className="h-[280px] -ml-2">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={sleepTrend}>
+                  <defs>
+                    <linearGradient id="sleepGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#a855f7" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#a855f7" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="currentColor"
+                    className="text-zinc-100 dark:text-zinc-800"
+                  />
+                  <XAxis
+                    dataKey="date"
+                    tick={{ fontSize: 10, fill: '#a1a1aa' }}
+                    axisLine={false}
+                    tickLine={false}
+                    interval="preserveStartEnd"
+                  />
+                  <YAxis
+                    tick={{ fontSize: 10, fill: '#a1a1aa' }}
+                    axisLine={false}
+                    tickLine={false}
+                    domain={[0, 'dataMax + 2']}
+                    tickFormatter={(v) => `${v}h`}
+                  />
+                  <Tooltip content={<SleepTooltip />} />
+                  <Area
+                    type="monotone"
+                    dataKey="hours"
+                    name="Sleep"
+                    stroke="#a855f7"
+                    strokeWidth={2.5}
+                    fill="url(#sleepGradient)"
+                    dot={false}
+                    activeDot={{
+                      r: 5,
+                      fill: '#a855f7',
+                      stroke: '#fff',
+                      strokeWidth: 2,
+                    }}
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </motion.div>
+
           {/* Mood Correlation Bar Chart */}
           <motion.div
-            custom={4}
+            custom={6}
             variants={cardVariants}
             initial="hidden"
             animate="visible"
@@ -269,7 +376,7 @@ export default function StatsPage() {
 
           {/* Enhanced Heatmap */}
           <motion.div
-            custom={5}
+            custom={7}
             variants={cardVariants}
             initial="hidden"
             animate="visible"

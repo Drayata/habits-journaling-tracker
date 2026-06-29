@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { format } from 'date-fns'
 import {
@@ -19,6 +20,8 @@ import ProgressRing from '../components/dashboard/ProgressRing'
 import HeatmapGrid from '../components/dashboard/HeatmapGrid'
 import JournalWidget from '../components/dashboard/JournalWidget'
 import MonthNavigator from '../components/dashboard/MonthNavigator'
+import SleepInputModal from '../components/habits/SleepInputModal'
+import { useSleep } from '../hooks/useSleep'
 
 const cardVariants = {
   hidden: { opacity: 0, y: 16 },
@@ -44,6 +47,21 @@ export default function DashboardPage() {
     getMonthlyCompletionCount,
   } = useHabits()
   const { journal } = useJournal(activeDate)
+  const { getSleepLog, upsertSleepLog, loading: sleepLoading } = useSleep()
+
+  const [isSleepModalOpen, setIsSleepModalOpen] = useState(false)
+  const [selectedSleepHabitId, setSelectedSleepHabitId] = useState(null)
+
+  const todaySleepLog = getSleepLog(activeDate)
+
+  const handleSleepSave = async ({ bedtime, wakeTime, duration }) => {
+    await upsertSleepLog({ date: activeDate, sleepTime: bedtime, wakeTime, durationMinutes: duration })
+    if (selectedSleepHabitId && !isCompleted(selectedSleepHabitId, activeDate)) {
+      toggleCompletion(selectedSleepHabitId, activeDate)
+    }
+    setIsSleepModalOpen(false)
+    setSelectedSleepHabitId(null)
+  }
 
   const firstName = profile?.full_name?.split(' ')[0] || 'there'
   const hour = new Date().getHours()
@@ -259,7 +277,12 @@ export default function DashboardPage() {
                       whileTap={isCurrentMonth ? { scale: 0.98 } : undefined}
                       onClick={() => {
                         if (isCurrentMonth) {
-                          toggleCompletion(habit.id, activeDate)
+                          if (habit.title.toLowerCase() === 'sleep tracker') {
+                            setSelectedSleepHabitId(habit.id)
+                            setIsSleepModalOpen(true)
+                          } else {
+                            toggleCompletion(habit.id, activeDate)
+                          }
                         }
                       }}
                       disabled={!isCurrentMonth}
@@ -292,6 +315,11 @@ export default function DashboardPage() {
                         }`}
                       >
                         {habit.title}
+                        {habit.title.toLowerCase() === 'sleep tracker' && done && todaySleepLog && (
+                          <span className="ml-2 text-xs opacity-70">
+                            ({Math.floor(todaySleepLog.duration_minutes / 60)}h {todaySleepLog.duration_minutes % 60}m)
+                          </span>
+                        )}
                       </span>
                       <div
                         className="w-2 h-2 rounded-full ml-auto"
@@ -330,6 +358,15 @@ export default function DashboardPage() {
           </motion.div>
         </motion.div>
       </AnimatePresence>
+
+      <SleepInputModal
+        isOpen={isSleepModalOpen}
+        onClose={() => setIsSleepModalOpen(false)}
+        onSave={handleSleepSave}
+        isLoading={sleepLoading}
+        initialBedtime={todaySleepLog?.sleep_time || '22:00'}
+        initialWakeTime={todaySleepLog?.wake_time || '06:00'}
+      />
     </div>
   )
 }

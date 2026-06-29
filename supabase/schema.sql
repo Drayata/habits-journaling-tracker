@@ -145,3 +145,38 @@ create index if not exists idx_habits_user_id on public.habits (user_id);
 create index if not exists idx_completions_habit_id on public.habit_completions (habit_id);
 create index if not exists idx_completions_user_date on public.habit_completions (user_id, completed_date);
 create index if not exists idx_journals_user_date on public.journals (user_id, entry_date);
+
+-- ============================================================
+-- 5. SLEEP LOGS TABLE
+-- ============================================================
+create table if not exists public.sleep_logs (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users on delete cascade not null,
+  entry_date date not null,
+  sleep_time time not null,
+  wake_time time not null,
+  duration_minutes integer not null,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now(),
+  constraint unique_sleep_user_date unique (user_id, entry_date)
+);
+
+alter table public.sleep_logs enable row level security;
+
+create policy "Users can view own sleep logs"
+  on public.sleep_logs for select
+  using (auth.uid() = user_id);
+
+create policy "Users can insert own sleep logs"
+  on public.sleep_logs for insert
+  with check (auth.uid() = user_id);
+
+create policy "Users can update own sleep logs"
+  on public.sleep_logs for update
+  using (auth.uid() = user_id);
+
+create policy "Users can delete own sleep logs"
+  on public.sleep_logs for delete
+  using (auth.uid() = user_id);
+
+create index if not exists idx_sleep_logs_user_date on public.sleep_logs (user_id, entry_date);
