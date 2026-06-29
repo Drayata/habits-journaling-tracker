@@ -1,10 +1,17 @@
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
-import { format, subDays, isAfter, isBefore, startOfDay } from 'date-fns'
+import { useDate } from '../contexts/DateContext'
+import {
+  format,
+  subDays,
+  startOfDay,
+  eachDayOfInterval,
+} from 'date-fns'
 
 export function useHabits() {
   const { user } = useAuth()
+  const { monthStartStr, monthEndStr, monthStart, monthEnd } = useDate()
   const [habits, setHabits] = useState([])
   const [completions, setCompletions] = useState([])
   const [loading, setLoading] = useState(true)
@@ -20,17 +27,17 @@ export function useHabits() {
     if (!error && data) setHabits(data)
   }, [user])
 
-  // Fetch completions for the last 35 days (covers 4-week heatmap + streak calc)
+  // Fetch completions scoped to the selected month
   const fetchCompletions = useCallback(async () => {
     if (!user) return
-    const since = format(subDays(new Date(), 35), 'yyyy-MM-dd')
     const { data, error } = await supabase
       .from('habit_completions')
       .select('*')
       .eq('user_id', user.id)
-      .gte('completed_date', since)
+      .gte('completed_date', monthStartStr)
+      .lte('completed_date', monthEndStr)
     if (!error && data) setCompletions(data)
-  }, [user])
+  }, [user, monthStartStr, monthEndStr])
 
   useEffect(() => {
     if (user) {
@@ -133,10 +140,35 @@ export function useHabits() {
     return streak
   }
 
-  // Get the best (longest) current streak across all habits
+  // Get the best streak within the selected month
   function getBestStreak() {
     if (habits.length === 0) return 0
-    return Math.max(...habits.map((h) => getStreak(h.id)), 0)
+
+    // Get all days in the month
+    const monthDays = eachDayOfInterval({ start: monthStart, end: monthEnd })
+
+    let bestStreak = 0
+
+    for (const habit of habits) {
+      const habitDates = new Set(
+        completions
+          .filter((c) => c.habit_id === habit.id)
+          .map((c) => c.completed_date)
+      )
+
+      let currentStreak = 0
+      for (const day of monthDays) {
+        const dateStr = format(day, 'yyyy-MM-dd')
+        if (habitDates.has(dateStr)) {
+          currentStreak++
+          bestStreak = Math.max(bestStreak, currentStreak)
+        } else {
+          currentStreak = 0
+        }
+      }
+    }
+
+    return bestStreak
   }
 
   // Get completions count for a specific date
@@ -149,6 +181,11 @@ export function useHabits() {
   function getCompletionRate(date) {
     if (habits.length === 0) return 0
     return getCompletedCount(date) / habits.length
+  }
+
+  // Get total completions count for the active month
+  function getMonthlyCompletionCount() {
+    return completions.length
   }
 
   // CRUD: Add habit
@@ -213,6 +250,7 @@ export function useHabits() {
     getBestStreak,
     getCompletedCount,
     getCompletionRate,
+    getMonthlyCompletionCount,
     addHabit,
     updateHabit,
     deleteHabit,

@@ -1,10 +1,13 @@
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
-import { format, subDays, eachDayOfInterval } from 'date-fns'
+import { useDate } from '../contexts/DateContext'
+import { format, eachDayOfInterval } from 'date-fns'
 
 export function useStatistics() {
   const { user } = useAuth()
+  const { monthStart, monthEnd, monthStartStr, monthEndStr, daysInMonth } =
+    useDate()
   const [completionTrend, setCompletionTrend] = useState([])
   const [moodCorrelation, setMoodCorrelation] = useState([])
   const [loading, setLoading] = useState(true)
@@ -13,11 +16,7 @@ export function useStatistics() {
     if (!user) return
     setLoading(true)
 
-    const today = new Date()
-    const thirtyDaysAgo = subDays(today, 29)
-    const sinceDate = format(thirtyDaysAgo, 'yyyy-MM-dd')
-
-    // Fetch all data in parallel
+    // Fetch all data in parallel, scoped to the selected month
     const [habitsRes, completionsRes, journalsRes] = await Promise.all([
       supabase
         .from('habits')
@@ -27,12 +26,14 @@ export function useStatistics() {
         .from('habit_completions')
         .select('*')
         .eq('user_id', user.id)
-        .gte('completed_date', sinceDate),
+        .gte('completed_date', monthStartStr)
+        .lte('completed_date', monthEndStr),
       supabase
         .from('journals')
         .select('entry_date, mood')
         .eq('user_id', user.id)
-        .gte('entry_date', sinceDate),
+        .gte('entry_date', monthStartStr)
+        .lte('entry_date', monthEndStr),
     ])
 
     const habits = habitsRes.data || []
@@ -40,8 +41,8 @@ export function useStatistics() {
     const journals = journalsRes.data || []
     const habitCount = habits.length
 
-    // ===== 1. Daily Completion Rate Trend (30 days) =====
-    const days = eachDayOfInterval({ start: thirtyDaysAgo, end: today })
+    // ===== 1. Daily Completion Rate Trend (entire month) =====
+    const days = eachDayOfInterval({ start: monthStart, end: monthEnd })
     const trend = days.map((day) => {
       const dateStr = format(day, 'yyyy-MM-dd')
       const dayCompletions = completions.filter(
@@ -86,7 +87,7 @@ export function useStatistics() {
     setMoodCorrelation(moodData)
 
     setLoading(false)
-  }, [user])
+  }, [user, monthStartStr, monthEndStr, monthStart, monthEnd])
 
   useEffect(() => {
     fetchStats()
@@ -96,6 +97,7 @@ export function useStatistics() {
     completionTrend,
     moodCorrelation,
     loading,
+    daysInMonth,
     refetch: fetchStats,
   }
 }

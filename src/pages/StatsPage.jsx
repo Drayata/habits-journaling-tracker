@@ -2,8 +2,6 @@ import { motion } from 'framer-motion'
 import { BarChart3, TrendingUp, Heart, ArrowLeft } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import {
-  LineChart,
-  Line,
   BarChart,
   Bar,
   XAxis,
@@ -16,7 +14,9 @@ import {
 } from 'recharts'
 import { useStatistics } from '../hooks/useStatistics'
 import { useHabits } from '../hooks/useHabits'
+import { useDate } from '../contexts/DateContext'
 import HeatmapGrid from '../components/dashboard/HeatmapGrid'
+import MonthNavigator from '../components/dashboard/MonthNavigator'
 
 const cardVariants = {
   hidden: { opacity: 0, y: 16 },
@@ -59,8 +59,9 @@ function MoodTooltip({ active, payload, label }) {
 }
 
 export default function StatsPage() {
-  const { completionTrend, moodCorrelation, loading } = useStatistics()
+  const { completionTrend, moodCorrelation, loading, daysInMonth } = useStatistics()
   const { habits, completions } = useHabits()
+  const { monthLabel } = useDate()
 
   // Calculate summary stats
   const avgCompletion =
@@ -93,10 +94,13 @@ export default function StatsPage() {
             Statistics
           </h1>
           <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
-            Your habit insights from the last 30 days
+            Your habit insights for {monthLabel}
           </p>
         </div>
       </div>
+
+      {/* Month Navigator */}
+      <MonthNavigator />
 
       {loading ? (
         <div className="flex items-center justify-center py-20">
@@ -137,7 +141,7 @@ export default function StatsPage() {
               animate="visible"
               className="bento-card text-center py-5"
             >
-              <p className="text-3xl font-bold text-amber-500">{activeDays}/30</p>
+              <p className="text-3xl font-bold text-amber-500">{activeDays}/{daysInMonth}</p>
               <p className="text-xs text-zinc-500 dark:text-zinc-500 mt-1 font-medium uppercase tracking-wider">
                 Active Days
               </p>
@@ -274,7 +278,7 @@ export default function StatsPage() {
             <div className="flex items-center gap-2 mb-4">
               <BarChart3 className="w-4 h-4 text-emerald-500" />
               <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-300">
-                Activity Heatmap (4 Weeks)
+                Activity Heatmap — {monthLabel}
               </h3>
             </div>
             <HeatmapGrid completions={completions} habitCount={habits.length} />
