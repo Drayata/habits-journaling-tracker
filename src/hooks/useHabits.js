@@ -8,6 +8,7 @@ import {
   startOfDay,
   eachDayOfInterval,
 } from 'date-fns'
+import { isHabitActiveOnDate } from '../utils/habitUtils'
 
 export function useHabits() {
   const { user } = useAuth()
@@ -110,6 +111,9 @@ export function useHabits() {
 
   // Calculate streak for a habit (consecutive days ending today)
   function getStreak(habitId) {
+    const habit = habits.find(h => h.id === habitId)
+    if (!habit) return 0
+
     const habitCompletions = completions
       .filter((c) => c.habit_id === habitId)
       .map((c) => c.completed_date)
@@ -128,6 +132,7 @@ export function useHabits() {
     }
 
     for (let i = 0; i < 365; i++) {
+      if (!isHabitActiveOnDate(habit, checkDate)) break
       const dateStr = format(checkDate, 'yyyy-MM-dd')
       if (habitCompletions.includes(dateStr)) {
         streak++
@@ -158,6 +163,11 @@ export function useHabits() {
 
       let currentStreak = 0
       for (const day of monthDays) {
+        if (!isHabitActiveOnDate(habit, day)) {
+          currentStreak = 0
+          continue
+        }
+
         const dateStr = format(day, 'yyyy-MM-dd')
         if (habitDates.has(dateStr)) {
           currentStreak++
@@ -171,6 +181,11 @@ export function useHabits() {
     return bestStreak
   }
 
+  // Get active habits for a specific date
+  function getActiveHabits(date) {
+    return habits.filter(habit => isHabitActiveOnDate(habit, date))
+  }
+
   // Get completions count for a specific date
   function getCompletedCount(date) {
     const dateStr = format(date, 'yyyy-MM-dd')
@@ -179,8 +194,9 @@ export function useHabits() {
 
   // Get completion rate for a date (0-1)
   function getCompletionRate(date) {
-    if (habits.length === 0) return 0
-    return getCompletedCount(date) / habits.length
+    const activeHabits = getActiveHabits(date)
+    if (activeHabits.length === 0) return 0
+    return getCompletedCount(date) / activeHabits.length
   }
 
   // Get total completions count for the active month
@@ -223,20 +239,24 @@ export function useHabits() {
 
   // CRUD: Delete habit
   async function deleteHabit(habitId) {
-    // Optimistic delete
-    const removed = habits.find((h) => h.id === habitId)
-    setHabits((prev) => prev.filter((h) => h.id !== habitId))
-    setCompletions((prev) => prev.filter((c) => c.habit_id !== habitId))
+    // Optimistic soft delete
+    const habitIndex = habits.findIndex((h) => h.id === habitId)
+    if (habitIndex === -1) return
+    const removed = habits[habitIndex]
+    const archivedDate = new Date().toISOString()
+    
+    setHabits((prev) => 
+      prev.map(h => h.id === habitId ? { ...h, is_archived: true, archived_at: archivedDate } : h)
+    )
 
     const { error } = await supabase
       .from('habits')
-      .delete()
+      .update({ is_archived: true, archived_at: archivedDate })
       .eq('id', habitId)
 
-    if (error && removed) {
+    if (error) {
       // Rollback
-      setHabits((prev) => [...prev, removed])
-      await fetchCompletions()
+      setHabits((prev) => prev.map(h => h.id === habitId ? removed : h))
     }
   }
 
@@ -248,6 +268,7 @@ export function useHabits() {
     toggleCompletion,
     getStreak,
     getBestStreak,
+    getActiveHabits,
     getCompletedCount,
     getCompletionRate,
     getMonthlyCompletionCount,

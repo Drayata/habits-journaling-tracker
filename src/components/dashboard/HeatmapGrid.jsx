@@ -9,8 +9,9 @@ import {
 } from 'date-fns'
 import { motion } from 'framer-motion'
 import { useDate } from '../../contexts/DateContext'
+import { isHabitActiveOnDate } from '../../utils/habitUtils'
 
-export default function HeatmapGrid({ completions, habitCount }) {
+export default function HeatmapGrid({ completions, habits }) {
   const { monthStart, daysInMonth } = useDate()
 
   // Get the weekday of the 1st (0 = Sun, 1 = Mon, ... 6 = Sat)
@@ -33,12 +34,15 @@ export default function HeatmapGrid({ completions, habitCount }) {
     const count = completions.filter(
       (c) => c.completed_date === dateStr
     ).length
+    const activeHabitCount = habits.filter(h => isHabitActiveOnDate(h, date)).length
+    
     cells.push({
       type: 'day',
       key: dateStr,
       date,
       dateStr,
       count,
+      activeHabitCount,
       isToday: isToday(date),
       isFuture: isFuture(date),
     })
@@ -58,10 +62,10 @@ export default function HeatmapGrid({ completions, habitCount }) {
     rows.push(cells.slice(i, i + 7))
   }
 
-  function getIntensity(count) {
+  function getIntensity(count, activeHabitCount) {
     if (count === 0) return 'bg-slate-100 dark:bg-zinc-800/50'
-    if (habitCount === 0) return 'bg-emerald-200 dark:bg-emerald-900'
-    const ratio = count / habitCount
+    if (activeHabitCount === 0) return 'bg-emerald-200 dark:bg-emerald-900'
+    const ratio = count / activeHabitCount
     if (ratio <= 0.25) return 'bg-emerald-200 dark:bg-emerald-900/60'
     if (ratio <= 0.5) return 'bg-emerald-300 dark:bg-emerald-700'
     if (ratio <= 0.75) return 'bg-emerald-400 dark:bg-emerald-600'
@@ -114,14 +118,14 @@ export default function HeatmapGrid({ completions, habitCount }) {
                 className={`aspect-square rounded-lg transition-colors relative flex items-center justify-center ${
                   cell.isFuture
                     ? 'bg-zinc-50 dark:bg-zinc-900 border border-dashed border-zinc-200/80 dark:border-zinc-800'
-                    : getIntensity(cell.count)
+                    : getIntensity(cell.count, cell.activeHabitCount)
                 } ${cell.isToday ? 'ring-2 ring-indigo-500 ring-offset-1 ring-offset-white dark:ring-offset-zinc-950' : ''}`}
               >
                 <span
                   className={`text-[10px] font-medium leading-none ${
                     cell.isFuture
                       ? 'text-zinc-400 dark:text-zinc-600'
-                      : cell.count > 0 && habitCount > 0 && (cell.count / habitCount) > 0.5
+                      : cell.count > 0 && cell.activeHabitCount > 0 && (cell.count / cell.activeHabitCount) > 0.5
                       ? 'text-white/80'
                       : 'text-zinc-500 dark:text-zinc-400'
                   }`}

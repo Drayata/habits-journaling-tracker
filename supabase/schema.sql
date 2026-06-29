@@ -59,7 +59,9 @@ create table if not exists public.habits (
   title text not null,
   frequency text default 'daily',
   color_hint text default '#10b981',
-  created_at timestamptz default now()
+  created_at timestamptz default now(),
+  is_archived boolean default false,
+  archived_at timestamptz
 );
 
 alter table public.habits enable row level security;

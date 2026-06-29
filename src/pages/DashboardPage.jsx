@@ -40,6 +40,7 @@ export default function DashboardPage() {
     toggleCompletion,
     getCompletionRate,
     getBestStreak,
+    getActiveHabits,
     getMonthlyCompletionCount,
   } = useHabits()
   const { journal } = useJournal(activeDate)
@@ -52,7 +53,9 @@ export default function DashboardPage() {
   const todayRate = getCompletionRate(activeDate)
   const bestStreak = getBestStreak()
   const monthlyCompletions = getMonthlyCompletionCount()
-  const completedToday = habits.filter((h) =>
+  
+  const activeHabits = getActiveHabits(activeDate)
+  const completedToday = activeHabits.filter((h) =>
     isCompleted(h.id, activeDate)
   ).length
 
@@ -121,7 +124,7 @@ export default function DashboardPage() {
           >
             <ProgressRing progress={todayRate} size={140} strokeWidth={10} />
             <p className="text-sm font-medium text-zinc-900 dark:text-zinc-50 mt-4">
-              {completedToday} of {habits.length} habits
+              {completedToday} of {activeHabits.length} habits
             </p>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
               {isCurrentMonth ? 'completed today' : format(activeDate, 'MMM d')}
@@ -175,7 +178,7 @@ export default function DashboardPage() {
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <p className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-                  {habits.length}
+                  {getActiveHabits(new Date()).length}
                 </p>
                 <p className="text-xs text-zinc-500 dark:text-zinc-400">Active Habits</p>
               </div>
@@ -215,7 +218,7 @@ export default function DashboardPage() {
                 <div className="w-6 h-6 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
               </div>
             ) : (
-              <HeatmapGrid completions={completions} habitCount={habits.length} />
+              <HeatmapGrid completions={completions} habits={habits} />
             )}
           </motion.div>
 
@@ -242,13 +245,13 @@ export default function DashboardPage() {
               </Link>
             </div>
 
-            {habits.length === 0 ? (
+            {activeHabits.length === 0 ? (
               <p className="text-sm text-zinc-500 dark:text-zinc-400 py-4 text-center">
                 No habits yet. <Link to="/habits" className="text-indigo-500 hover:underline">Create one!</Link>
               </p>
             ) : (
               <div className="space-y-2 max-h-[200px] overflow-y-auto hide-scrollbar">
-                {habits.map((habit) => {
+                {activeHabits.map((habit) => {
                   const done = isCompleted(habit.id, activeDate)
                   return (
                     <motion.button

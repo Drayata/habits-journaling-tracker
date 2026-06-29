@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { useDate } from '../contexts/DateContext'
 import { format, eachDayOfInterval } from 'date-fns'
+import { isHabitActiveOnDate } from '../utils/habitUtils'
 
 export function useStatistics() {
   const { user } = useAuth()
@@ -20,7 +21,7 @@ export function useStatistics() {
     const [habitsRes, completionsRes, journalsRes] = await Promise.all([
       supabase
         .from('habits')
-        .select('id')
+        .select('id, created_at, is_archived, archived_at')
         .eq('user_id', user.id),
       supabase
         .from('habit_completions')
@@ -48,13 +49,16 @@ export function useStatistics() {
       const dayCompletions = completions.filter(
         (c) => c.completed_date === dateStr
       ).length
-      const rate = habitCount > 0 ? Math.round((dayCompletions / habitCount) * 100) : 0
+      
+      const activeHabitCount = habits.filter(h => isHabitActiveOnDate(h, day)).length
+      const rate = activeHabitCount > 0 ? Math.round((dayCompletions / activeHabitCount) * 100) : 0
+      
       return {
         date: format(day, 'MMM d'),
         dateRaw: dateStr,
         rate,
         completed: dayCompletions,
-        total: habitCount,
+        total: activeHabitCount,
       }
     })
     setCompletionTrend(trend)
@@ -70,7 +74,10 @@ export function useStatistics() {
       const dayCompletions = completions.filter(
         (c) => c.completed_date === j.entry_date
       ).length
-      const rate = habitCount > 0 ? (dayCompletions / habitCount) * 100 : 0
+      
+      const activeHabitCount = habits.filter(h => isHabitActiveOnDate(h, j.entry_date)).length
+      const rate = activeHabitCount > 0 ? (dayCompletions / activeHabitCount) * 100 : 0
+      
       moodMap[j.mood].totalRate += rate
       moodMap[j.mood].count += 1
     })

@@ -281,7 +281,7 @@ export default function StatsPage() {
                 Activity Heatmap — {monthLabel}
               </h3>
             </div>
-            <HeatmapGrid completions={completions} habitCount={habits.length} />
+            <HeatmapGrid completions={completions} habits={habits} />
           </motion.div>
         </>
       )}

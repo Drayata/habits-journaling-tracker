@@ -19,12 +19,14 @@ export default function HabitsPage() {
     addHabit,
     updateHabit,
     deleteHabit,
+    getActiveHabits,
   } = useHabits()
 
   const [showModal, setShowModal] = useState(false)
   const [editingHabit, setEditingHabit] = useState(null)
 
-  const completedCount = habits.filter((h) =>
+  const activeHabits = getActiveHabits(activeDate)
+  const completedCount = activeHabits.filter((h) =>
     isCompleted(h.id, activeDate)
   ).length
 
@@ -55,7 +57,7 @@ export default function HabitsPage() {
             Habits
           </h1>
           <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
-            {format(activeDate, 'EEEE, MMMM d')} · {completedCount}/{habits.length} done
+            {format(activeDate, 'EEEE, MMMM d')} · {completedCount}/{activeHabits.length} done
           </p>
         </div>
         <motion.button
@@ -84,7 +86,7 @@ export default function HabitsPage() {
             />
           ))}
         </div>
-      ) : habits.length === 0 ? (
+      ) : activeHabits.length === 0 ? (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -103,7 +105,7 @@ export default function HabitsPage() {
       ) : (
         <div className="space-y-2">
           <AnimatePresence>
-            {habits.map((habit) => (
+            {activeHabits.map((habit) => (
               <HabitCard
                 key={habit.id}
                 habit={habit}
@@ -119,15 +121,15 @@ export default function HabitsPage() {
       )}
 
       {/* Progress summary */}
-      {habits.length > 0 && (
+      {activeHabits.length > 0 && (
         <div className="bento-card">
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm font-medium text-zinc-900 dark:text-zinc-300">
               Today&apos;s Progress
             </span>
             <span className="text-sm font-semibold text-emerald-500">
-              {habits.length > 0
-                ? Math.round((completedCount / habits.length) * 100)
+              {activeHabits.length > 0
+                ? Math.round((completedCount / activeHabits.length) * 100)
                 : 0}
               %
             </span>
@@ -136,7 +138,7 @@ export default function HabitsPage() {
             <motion.div
               initial={{ width: 0 }}
               animate={{
-                width: `${habits.length > 0 ? (completedCount / habits.length) * 100 : 0}%`,
+                width: `${activeHabits.length > 0 ? (completedCount / activeHabits.length) * 100 : 0}%`,
               }}
               transition={{ duration: 0.6, ease: 'easeOut' }}
               className="h-full bg-gradient-to-r from-emerald-400 to-emerald-500 rounded-full"
